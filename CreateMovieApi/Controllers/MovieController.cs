@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using CreateMovieApi.Data;
+using CreateMovieApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CreateMovieApi.Data;
-using CreateMovieApi.Models;
+using System.Data.Entity;
+using System.Data.Entity.SqlServer;
 
 namespace CreateMovieApi.Controllers
 {
@@ -21,25 +18,99 @@ namespace CreateMovieApi.Controllers
             _context = context;
         }
 
+        // RQ1 - Get a list of all movies
         // GET: api/Movie
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovie()
+        [HttpGet("GetMovieList")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetMovieList()
         {
-          if (_context.Movie == null)
-          {
-              return NotFound();
-          }
+            if (_context.Movie == null)
+            {
+                return NotFound();
+            }
             return await _context.Movie.ToListAsync();
         }
 
-        // GET: api/Movie/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Movie>> GetMovie(int id)
+        // RQ2 - Get a list of all movies in a specific category
+        // GET: api/Movie
+        [HttpGet("GetMovieListByCategory/{category}")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetMovieListByCategory(string category)
         {
-          if (_context.Movie == null)
-          {
-              return NotFound();
-          }
+            if (_context.Movie == null)
+            {
+                return NotFound();
+            }
+
+            return await _context.Movie.Where(m => m.Category.Contains(category)).ToListAsync();
+        }
+
+        //RQ3 - Get a random movie pick
+        [HttpGet("GetRandomMovie")]
+        public async Task<ActionResult<Movie>> GetRandomMovie()
+        {
+            Random rand = new Random();
+            var movieCt = _context.Movie.Count();
+            int toSkip = rand.Next(0, _context.Movie.Count());
+
+            if (_context.Movie == null)
+            {
+                return NotFound();
+            }
+
+            return _context.Movie.Skip(toSkip).Take(1).First();
+        }
+
+        //RQ4 - Get a random movie pick from a specific category
+
+        [HttpGet("GetRandomMovieByCategory/{category}")]
+        public async Task<ActionResult<Movie>> GetRandomMovieByCategory(string category)
+        {
+
+            Random rand = new Random();
+            int toSkip = rand.Next(1, _context.Movie.Count());
+
+            if (_context.Movie == null)
+            {
+                return NotFound();
+            }
+
+            return _context.Movie.Where(c => c.Category == category).Skip(toSkip).Take(1).First();
+            //return _context.Movie.ElementAt(toSkip);
+        }
+
+        //RQ5- Get a random movie pick from a specific category
+        // http://www.blackbeltcoder.com/Articles/linq/extending-linq-with-random-operations
+        // https://stackoverflow.com/questions/3173718/how-to-get-a-random-object-using-linq
+
+        [HttpGet("GetMultipleRandomMovies/{quantity}")]
+        public async Task<ActionResult<IEnumerable<Movie>>> GetMultipleRandomMovies(int qty)
+        {
+            List<Movie> movieList = new List<Movie>();
+            //Random rand = new Random();
+            //int toSkip = rand.Next(1, _context.Movie.Count());
+
+            //if (_context.Movie == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //while (movieList.Count < 2)
+            //{
+            //    Movie result = _context.Movie.Skip(toSkip).Take(qty).First();
+            //    movieList.Add(result);
+            //}
+
+            return movieList;
+        }
+
+        // GET: api/Movie/5
+        // Not RQ
+        [HttpGet("GetMovieById/{id}")]
+        public async Task<ActionResult<Movie>> GetMovieById(int id)
+        {
+            if (_context.Movie == null)
+            {
+                return NotFound();
+            }
             var movie = await _context.Movie.FindAsync(id);
 
             if (movie == null)
@@ -52,73 +123,73 @@ namespace CreateMovieApi.Controllers
 
         // PUT: api/Movie/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutMovie(int id, Movie movie)
-        {
-            if (id != movie.MovieId)
-            {
-                return BadRequest();
-            }
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutMovie(int id, Movie movie)
+        //{
+        //    if (id != movie.MovieId)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(movie).State = EntityState.Modified;
+        //    _context.Entry(movie).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!MovieExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!MovieExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // POST: api/Movie
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
-        {
-          if (_context.Movie == null)
-          {
-              return Problem("Entity set 'SearchMovieApiDbContext.Movie'  is null.");
-          }
-            _context.Movie.Add(movie);
-            await _context.SaveChangesAsync();
+        //[HttpPost]
+        //public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        //{
+        //  if (_context.Movie == null)
+        //  {
+        //      return Problem("Entity set 'SearchMovieApiDbContext.Movie'  is null.");
+        //  }
+        //    _context.Movie.Add(movie);
+        //    await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetMovie", new { id = movie.MovieId }, movie);
-        }
+        //    return CreatedAtAction("GetMovie", new { id = movie.MovieId }, movie);
+        //}
 
         // DELETE: api/Movie/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteMovie(int id)
-        {
-            if (_context.Movie == null)
-            {
-                return NotFound();
-            }
-            var movie = await _context.Movie.FindAsync(id);
-            if (movie == null)
-            {
-                return NotFound();
-            }
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteMovie(int id)
+        //{
+        //    if (_context.Movie == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var movie = await _context.Movie.FindAsync(id);
+        //    if (movie == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Movie.Remove(movie);
-            await _context.SaveChangesAsync();
+        //    _context.Movie.Remove(movie);
+        //    await _context.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        private bool MovieExists(int id)
-        {
-            return (_context.Movie?.Any(e => e.MovieId == id)).GetValueOrDefault();
-        }
+        //private bool MovieExists(int id)
+        //{
+        //    return (_context.Movie?.Any(e => e.MovieId == id)).GetValueOrDefault();
+        //}
     }
 }
