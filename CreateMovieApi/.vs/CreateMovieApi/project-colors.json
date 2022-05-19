@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "25c08945-b752-44a1-8c02-94f8523373bf": {
+      "ProjectGuid": "25c08945-b752-44a1-8c02-94f8523373bf",
+      "DisplayName": "CreateMovieApi",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}

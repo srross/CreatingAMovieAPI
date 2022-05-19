@@ -14,33 +14,33 @@ namespace CreateMovieApi.Controllers
     [ApiController]
     public class MovieController : ControllerBase
     {
-        private readonly RossMovieDbContext _context;
+        private readonly SearchMovieApiDbContext _context;
 
-        public MovieController(RossMovieDbContext context)
+        public MovieController(SearchMovieApiDbContext context)
         {
             _context = context;
         }
 
         // GET: api/Movie
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<Movie>>> GetMovie()
         {
-          if (_context.Movies == null)
+          if (_context.Movie == null)
           {
               return NotFound();
           }
-            return await _context.Movies.ToListAsync();
+            return await _context.Movie.ToListAsync();
         }
 
         // GET: api/Movie/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-          if (_context.Movies == null)
+          if (_context.Movie == null)
           {
               return NotFound();
           }
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movie.FindAsync(id);
 
             if (movie == null)
             {
@@ -86,26 +86,12 @@ namespace CreateMovieApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
-          if (_context.Movies == null)
+          if (_context.Movie == null)
           {
-              return Problem("Entity set 'RossMovieDbContext.Movies'  is null.");
+              return Problem("Entity set 'SearchMovieApiDbContext.Movie'  is null.");
           }
-            _context.Movies.Add(movie);
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateException)
-            {
-                if (MovieExists(movie.MovieId))
-                {
-                    return Conflict();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.Movie.Add(movie);
+            await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMovie", new { id = movie.MovieId }, movie);
         }
@@ -114,17 +100,17 @@ namespace CreateMovieApi.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {
-            if (_context.Movies == null)
+            if (_context.Movie == null)
             {
                 return NotFound();
             }
-            var movie = await _context.Movies.FindAsync(id);
+            var movie = await _context.Movie.FindAsync(id);
             if (movie == null)
             {
                 return NotFound();
             }
 
-            _context.Movies.Remove(movie);
+            _context.Movie.Remove(movie);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -132,7 +118,7 @@ namespace CreateMovieApi.Controllers
 
         private bool MovieExists(int id)
         {
-            return (_context.Movies?.Any(e => e.MovieId == id)).GetValueOrDefault();
+            return (_context.Movie?.Any(e => e.MovieId == id)).GetValueOrDefault();
         }
     }
 }
