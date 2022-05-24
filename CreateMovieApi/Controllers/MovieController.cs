@@ -2,8 +2,8 @@
 using CreateMovieApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
-using System.Data.Entity.SqlServer;
+//using System.Data.Entity;
+//using System.Data.Entity.SqlServer;
 
 namespace CreateMovieApi.Controllers
 {
@@ -32,6 +32,7 @@ namespace CreateMovieApi.Controllers
 
         // RQ2 - Get a list of all movies in a specific category
         // GET: api/Movie
+        // Learn more about - When do I use path params vs. query params in a RESTful API?
         [HttpGet("GetMovieListByCategory/{category}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovieListByCategory(string category)
         {
@@ -60,50 +61,44 @@ namespace CreateMovieApi.Controllers
         }
 
         //RQ4 - Get a random movie pick from a specific category
-
         [HttpGet("GetRandomMovieByCategory/{category}")]
         public async Task<ActionResult<Movie>> GetRandomMovieByCategory(string category)
         {
-
             Random rand = new Random();
             int toSkip = rand.Next(1, _context.Movie.Count());
 
-            if (_context.Movie == null)
-            {
-                return NotFound();
-            }
+           var randMovie = _context.Movie.Skip(toSkip).Where(r => r.Category.Contains(category)).Take(1).SingleOrDefault();
 
-            return _context.Movie.Where(c => c.Category == category).Skip(toSkip).Take(1).First();
-            //return _context.Movie.ElementAt(toSkip);
+            return randMovie;
         }
 
         //RQ5- Get a random movie pick from a specific category
-        // http://www.blackbeltcoder.com/Articles/linq/extending-linq-with-random-operations
-        // https://stackoverflow.com/questions/3173718/how-to-get-a-random-object-using-linq
-
         [HttpGet("GetMultipleRandomMovies/{quantity}")]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMultipleRandomMovies(int qty)
         {
-            List<Movie> movieList = new List<Movie>();
-            //Random rand = new Random();
-            //int toSkip = rand.Next(1, _context.Movie.Count());
+            Random rand = new Random();
+            int toSkip = rand.Next(1, _context.Movie.Count());
 
-            //if (_context.Movie == null)
-            //{
-            //    return NotFound();
-            //}
-
-            //while (movieList.Count < 2)
-            //{
-            //    Movie result = _context.Movie.Skip(toSkip).Take(qty).First();
-            //    movieList.Add(result);
-            //}
+            List<Movie> movieList = _context.Movie.Skip(toSkip).Take(qty).ToList();
 
             return movieList;
         }
 
+        //RQ5- Get a random movie pick from a specific category
+        // test - hmmm ... doesn't always return 5???
+        [HttpGet("GetMultipleRandomMoviesByCatagory/{quantity}/{category}")]
+        public async Task<ActionResult<List<Movie>>> GetMultipleRandMoviesByCatagory(int qty, string category)
+        {
+            Random rand = new Random();
+            int toSkip = rand.Next(1, _context.Movie.Count());
+
+            List<Movie> randMovieList = _context.Movie.Skip(toSkip).Where(r => r.Category.Contains(category)).Take(qty).ToList();
+
+            return randMovieList;
+        }
+
         // GET: api/Movie/5
-        // Not RQ
+        // Not a RQ
         [HttpGet("GetMovieById/{id}")]
         public async Task<ActionResult<Movie>> GetMovieById(int id)
         {

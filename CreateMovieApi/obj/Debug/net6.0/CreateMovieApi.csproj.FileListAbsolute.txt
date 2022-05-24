@@ -263,12 +263,3 @@ C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\zh-Hant\Micros
 C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\win-arm\lib\net6.0\dotnet-aspnet-codegenerator-design.exe
 C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\win-arm64\lib\net6.0\dotnet-aspnet-codegenerator-design.exe
 C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\obj\Debug\net6.0\CreateMovieApi.csproj.AssemblyReference.cache
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\EntityFramework.SqlServer.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\EntityFramework.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\System.CodeDom.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\System.Data.SqlClient.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\win-arm64\native\sni.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\win-x64\native\sni.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\win-x86\native\sni.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
-C:\GCAH\gc_labs\CreatingAMovieAPI\CreateMovieApi\bin\Debug\net6.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
