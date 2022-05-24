@@ -2,8 +2,6 @@
 using CreateMovieApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-//using System.Data.Entity;
-//using System.Data.Entity.SqlServer;
 
 namespace CreateMovieApi.Controllers
 {
